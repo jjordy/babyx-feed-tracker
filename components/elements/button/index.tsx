@@ -1,10 +1,16 @@
 import { cn } from "@/lib";
 import s from "./index.module.css";
 
-export default function Button({ className, children, ...rest }: any) {
+export default function Button({
+  className,
+  children,
+  as = "button",
+  ...rest
+}: any) {
+  const Component = as;
   return (
-    <button {...rest} className={cn(className, s.button)}>
+    <Component {...rest} className={cn(className, s.button)}>
       {children}
-    </button>
+    </Component>
   );
 }

@@ -1,5 +1,11 @@
-export default function Schedules () {
+import Heading from "@/components/elements/heading";
+import ScheduleForm from "@/components/forms/schedule";
+
+export default function Schedules() {
   return (
-  <main>Schedules</main>
-  )
+    <>
+      <Heading as="h1">Schedules</Heading>
+      <ScheduleForm />
+    </>
+  );
 }

@@ -1,0 +1,14 @@
+.feedingTable {
+  @apply table-auto w-full;
+}
+
+.feedingTableHeading {
+  @apply py-0.5 px-2 font-black font-heading uppercase text-sm text-slate-400 border-slate-200;
+}
+
+.feedingTableRow {
+  @apply border-b-2 last:border-b-0;
+}
+.feedingTableColumn {
+  @apply py-1 px-2 font-semibold text-sm  text-slate-600 text-center;
+}

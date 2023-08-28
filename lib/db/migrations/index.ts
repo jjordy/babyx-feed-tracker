@@ -1,7 +1,7 @@
 import { Kysely, sql } from "kysely";
-import { Database } from "../types";
+import { DB } from "kysely-codegen";
 
-export async function up(db: Kysely<Database>): Promise<void> {
+export async function up(db: Kysely<DB>): Promise<void> {
   await db.schema
     .createTable("baby")
     .addColumn("id", "integer", (col) => col.primaryKey())
@@ -18,6 +18,7 @@ export async function up(db: Kysely<Database>): Promise<void> {
     .createTable("schedule")
     .addColumn("id", "integer", (col) => col.primaryKey())
     .addColumn("name", "text", (col) => col.notNull().unique())
+    .addColumn("occurance", "text", (col) => col.notNull())
     .addColumn("owner_id", "integer", (col) =>
       col.references("baby.id").onDelete("cascade").notNull(),
     )
@@ -38,7 +39,7 @@ export async function up(db: Kysely<Database>): Promise<void> {
   await db.schema
     .createTable("feeding")
     .addColumn("id", "integer", (col) => col.primaryKey())
-    .addColumn("amount", "integer", (col) => col.notNull().unique())
+    .addColumn("amount", "integer", (col) => col.notNull())
     .addColumn("owner_id", "integer", (col) =>
       col.references("baby.id").onDelete("cascade").notNull(),
     )

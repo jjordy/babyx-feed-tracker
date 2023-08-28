@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "codegen": "kysely-codegen",
     "dev": "next dev",
     "build": "next build",
     "db:migrate": "ts-node ./lib/db/bin/index.ts",
+    "db:migrate:create": "ts-node ./lib/db/bin/create-migration.ts",
     "start": "next start",
     "lint": "next lint"
   },
@@ -21,6 +23,7 @@
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.19",
     "kysely": "^0.26.1",
+    "kysely-codegen": "0.10.1",
     "next": "13.4.19",
     "postcss": "8.4.28",
     "prettier": "^3.0.2",

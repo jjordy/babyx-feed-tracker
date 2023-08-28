@@ -1,20 +1,17 @@
-import Button from "@/components/elements/button";
-import { Input, Select } from "@/components/elements/inputs";
-import BabyForm from "@/components/forms/baby";
 import { cn } from "@/lib";
-import { createBaby, findBabyById } from "@/lib/db/data-repositories/baby";
-import { NewBaby } from "@/lib/db/types";
-import { redirect } from "next/navigation";
+import { findBabyById } from "@/lib/db/data-repositories/baby";
+import { formatDistanceToNow } from "date-fns";
+import Link from "next/link";
 
 export default async function BabyDetailPage({ params }: any) {
   const baby = await findBabyById(params.id);
 
   return (
-    <main className="container mx-auto px-4 pt-20">
-      <div className="flex space-x-4 items-center my-16">
+    <main>
+      <div className="flex space-x-4 items-center w-full">
         <div
           className={cn(
-            "w-12 h-12 rounded-full flex items-center justify-center font-black text-2xl",
+            "w-12 h-12 rounded-full flex items-center justify-center font-black text-2xl text-white",
             baby?.gender === "Boy" && "bg-sky-400",
             baby?.gender === "Girl" && "bg-pink-400",
           )}
@@ -24,8 +21,20 @@ export default async function BabyDetailPage({ params }: any) {
         <h1 className="text-6xl font-black">
           {baby?.first_name} {baby?.last_name}
         </h1>
+        <Link
+          href={`/babies/${baby?.id}/edit`}
+          className="text-xl font-medium underline text-indigo-500 hover:text-indigo-600"
+        >
+          Edit
+        </Link>
       </div>
-      <BabyForm baby={baby} />
+      <div className="text-slate-400 font-medium">
+        {formatDistanceToNow(new Date(baby?.birth_day!), {
+          includeSeconds: true,
+          addSuffix: false,
+        })}{" "}
+        old
+      </div>
     </main>
   );
 }

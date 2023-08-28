@@ -1,15 +1,18 @@
 import { db } from "..";
 import { BabyUpdate, Baby, NewBaby } from "../types";
+import { cache } from "react";
 
-export async function findBabyById(id: number) {
+export const revalidate = 3600;
+
+export const findBabyById = cache(async (id: number) => {
   return await db
     .selectFrom("baby")
     .where("id", "=", id)
     .selectAll()
     .executeTakeFirst();
-}
+});
 
-export async function findBabies(criteria: Partial<Baby>) {
+export const findBabies = cache(async (criteria: Partial<Baby>) => {
   let query = db.selectFrom("baby");
 
   if (criteria.id) {
@@ -37,7 +40,7 @@ export async function findBabies(criteria: Partial<Baby>) {
   }
 
   return await query.selectAll().execute();
-}
+});
 
 export async function updateBaby(id: number, updateWith: BabyUpdate) {
   await db.updateTable("baby").set(updateWith).where("id", "=", id).execute();
