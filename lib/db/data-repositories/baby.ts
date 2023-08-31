@@ -1,18 +1,39 @@
 import { db } from "..";
 import { BabyUpdate, Baby, NewBaby } from "../types";
-import { cache } from "react";
+import { jsonArrayFrom, jsonObjectFrom } from "kysely/helpers/sqlite";
 
-export const revalidate = 3600;
-
-export const findBabyById = cache(async (id: number) => {
+export const findBabyById = async (id: number) => {
   return await db
     .selectFrom("baby")
     .where("id", "=", id)
     .selectAll()
     .executeTakeFirst();
-});
+};
 
-export const findBabies = cache(async (criteria: Partial<Baby>) => {
+export const findBabiesMetrics = async () => {
+  return await db
+    .selectFrom("baby")
+    .selectAll()
+    .select((eb) => [
+      jsonArrayFrom(
+        eb
+          .selectFrom("feeding")
+          .select("feeding.created_at")
+          .whereRef("baby.id", "=", "feeding.owner_id")
+          .orderBy("feeding.created_at asc"),
+      ).as("labels"),
+      jsonArrayFrom(
+        eb
+          .selectFrom("feeding")
+          .select("feeding.amount")
+          .whereRef("baby.id", "=", "feeding.owner_id")
+          .orderBy("feeding.created_at asc"),
+      ).as("datasets"),
+    ])
+    .execute();
+};
+
+export const findBabies = async (criteria: Partial<Baby>) => {
   let query = db.selectFrom("baby");
 
   if (criteria.id) {
@@ -40,7 +61,7 @@ export const findBabies = cache(async (criteria: Partial<Baby>) => {
   }
 
   return await query.selectAll().execute();
-});
+};
 
 export async function updateBaby(id: number, updateWith: BabyUpdate) {
   await db.updateTable("baby").set(updateWith).where("id", "=", id).execute();

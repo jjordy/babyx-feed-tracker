@@ -2,10 +2,10 @@ import path from "node:path";
 import SQLite from "better-sqlite3";
 import { promises as fs } from "fs";
 import { Kysely, Migrator, FileMigrationProvider, SqliteDialect } from "kysely";
-import { Database } from "../types";
+import { DB } from "kysely-codegen";
 
 async function migrateToLatest() {
-  const db = new Kysely<Database>({
+  const db = new Kysely<DB>({
     dialect: new SqliteDialect({
       database: new SQLite("babyx-feed-tracker.db"),
     }),

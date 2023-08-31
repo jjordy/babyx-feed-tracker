@@ -1,3 +1,7 @@
+.feedingTableWrapper {
+  @apply border-2 rounded-lg;
+}
+
 .feedingTable {
   @apply table-auto w-full;
 }

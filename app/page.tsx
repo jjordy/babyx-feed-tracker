@@ -1,31 +1,63 @@
+import LineChart from "@/components/charts/line";
 import Button from "@/components/elements/button";
+import Divider from "@/components/elements/divider";
 import Heading from "@/components/elements/heading";
 import Table from "@/components/elements/table";
-import { cn } from "@/lib";
-import { findBabies } from "@/lib/db/data-repositories/baby";
+import { findBabies, findBabiesMetrics } from "@/lib/db/data-repositories/baby";
 import { findFeedings } from "@/lib/db/data-repositories/feeding";
-import { formatDistanceToNow } from "date-fns";
+import { format, formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 
-export default async function Home() {
+async function getHomepageData() {
+  const babies = await findBabies({});
+  const metrics = await findBabiesMetrics();
   const feedings = await findFeedings({});
-  const feedingsRows = feedings?.map(({ id, ...rest }) => ({
+  return {
+    babies,
+    feedings,
+    metrics,
+  };
+}
+
+export default async function Home() {
+  const { babies, feedings, metrics } = await getHomepageData();
+  const feedingsRows = feedings?.map(({ id, created_at, ...rest }) => ({
     ...rest,
+    created_at: format(new Date(created_at), "MM/dd/yyyy"),
     Details: () => (
       <Link href={`/feedings/${id}`} className="underline text-indigo-500">
         Feeding {id}
       </Link>
     ),
   }));
-  console.log(feedingsRows);
-  const babies = await findBabies({});
+
   return (
     <>
-      <div className="flex flex-col space-y-8">
+      <Heading as="h1">At a glance</Heading>
+      <Divider />
+      <div className="">
         <div className="space-y-8">
-          <Heading>Feedings</Heading>
+          <Heading as="h4">Feedings</Heading>
+          {metrics && metrics.length > 0 && (
+            <LineChart
+              data={{
+                labels: metrics[0].labels.map((v) =>
+                  format(new Date(v.created_at), "MM/dd/yyyy"),
+                ),
+                datasets: metrics?.map((baby, id) => ({
+                  label: `${baby.first_name} ${baby.last_name}`,
+                  borderColor:
+                    id % 2 === 0 ? "rgb(255, 99, 132)" : "rgb(53, 162, 235)",
+                  backgroundColor: "rgba(53, 162, 235, 0.5)",
+                  data: baby.datasets.map((d) => d.amount),
+                })),
+              }}
+            />
+          )}
           {feedingsRows && feedingsRows.length > 0 ? (
-            <Table data={feedingsRows} />
+            <>
+              <Table data={feedingsRows} />
+            </>
           ) : (
             <div className="text-center font-black text-slate-200">
               No Feedings Yet
@@ -33,15 +65,19 @@ export default async function Home() {
           )}
         </div>
         <div className="space-y-8">
-          <Heading>Babies</Heading>
-          <Table data={babies} />
-          <Button
-            as={Link}
-            href="/babies/add"
-            className="bg-white rounded shadow-xl px-4 py-3 text-slate-500 flex items-center justify-center font-semibold uppercase tracking-wide"
-          >
-            Add a baby
-          </Button>
+          <Heading as="h4">Babies</Heading>
+          {babies && babies.length > 0 ? (
+            <Table data={babies} />
+          ) : (
+            <div className="text-center font-black text-slate-200">
+              No Babies Yet
+            </div>
+          )}
+          <div className="flex items-center justify-end">
+            <Button as={Link} href="/babies/add">
+              Add a baby
+            </Button>
+          </div>
         </div>
       </div>
     </>

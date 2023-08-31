@@ -1,4 +1,5 @@
 import fs from "node:fs/promises";
+import path from "node:path";
 
 const [_tsNode, _rootPath, ...args] = process.argv;
 
@@ -32,9 +33,26 @@ export async function down(db: Kysely<any>): Promise<void> {
 }`;
 
 async function createMigration() {
+  console.log(
+    path.join(
+      __dirname,
+      "..",
+      "migrations",
+      `${Date.parse(new Date().toUTCString()) / 1000}${
+        argsObj.name ? `_${argsObj.name}` : ""
+      }.ts`,
+    ),
+  );
   try {
     await fs.writeFile(
-      `${new Date().toUTCString()}${argsObj.name ? `_${argsObj.name}` : ""}.ts`,
+      path.join(
+        __dirname,
+        "..",
+        "migrations",
+        `${Date.parse(new Date().toUTCString()) / 1000}${
+          argsObj.name ? `_${argsObj.name}` : ""
+        }.ts`,
+      ),
       fileContent,
     );
   } catch (err) {}

@@ -25,14 +25,8 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${inter.variable}`}>
         <Navbar />
-        <main className="flex">
-          <section
-            id="sidebar"
-            className="w-64 border-r border-slate-900/10 h-screen fixed"
-          >
-            <Sidebar babies={babies} />
-          </section>
-          <section id="main-content" className="ml-72 w-full pt-8 mr-24">
+        <main className="flex mt-12">
+          <section id="main-content" className="container mx-auto">
             {children}
           </section>
         </main>

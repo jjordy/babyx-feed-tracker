@@ -3,7 +3,7 @@ import s from "./index.module.css";
 
 export default function Table({ data }: { data: Record<string, any>[] }) {
   return (
-    <div className="border-2 rounded-lg">
+    <div className={s.feedingTableWrapper}>
       <table className={cn(s.feedingTable)}>
         <thead>
           <tr>

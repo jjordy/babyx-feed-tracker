@@ -1,26 +1,20 @@
 import { sql } from "kysely";
 import { db } from "..";
 import { FeedingUpdate, Feeding, NewFeeding } from "../types";
-import { cache } from "react";
 
-export const revalidate = 3600;
-
-export const findFeedingById = cache(async (id: number) => {
+export const findFeedingById = async (id: number) => {
   return await db
     .selectFrom("feeding")
-    .where("feeding.id", "=", id)
-    .innerJoin("baby as b", "b.id", "feeding.owner_id")
-    .innerJoin("schedule as s", "s.id", "schedule_id")
-    .select(["feeding.id as id", "amount", "feeding.created_at"])
-    .select(() => sql<string>`b.first_name || ' ' || b.last_name`.as("name"))
+    .where("id", "=", id)
+    .select(["id", "owner_id", "amount", "created_at"])
     .executeTakeFirst();
-});
+};
 
-export const findFeedings = cache(async (criteria: Partial<Feeding>) => {
+export const findFeedings = async (criteria: Partial<Feeding>) => {
   let query = db.selectFrom("feeding");
 
   if (criteria.id) {
-    query = query.where("id", "=", criteria.id); // Kysely is immutable, you must re-assign!
+    query = query.where("feeding.id", "=", criteria.id); // Kysely is immutable, you must re-assign!
   }
 
   if (criteria.amount) {
@@ -32,12 +26,11 @@ export const findFeedings = cache(async (criteria: Partial<Feeding>) => {
   }
 
   return await query
-    .innerJoin("baby as b", "b.id", "feeding.owner_id")
-    .innerJoin("schedule as s", "s.id", "schedule_id")
-    .select(["feeding.id as id", "amount as Amount (ML/CC)"])
-    .select(() => sql<string>`b.first_name || ' ' || b.last_name`.as("Name"))
+    .select(["id", "owner_id", "amount", "created_at"])
+    .orderBy("created_at", "desc")
+    .limit(10)
     .execute();
-});
+};
 
 export async function updateFeeding(id: number, updateWith: FeedingUpdate) {
   await db

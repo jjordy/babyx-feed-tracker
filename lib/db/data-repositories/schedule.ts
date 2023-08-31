@@ -1,18 +1,15 @@
 import { db } from "..";
 import { Schedule, ScheduleUpdate, NewSchedule } from "../types";
-import { cache } from "react";
 
-export const revalidate = 3600;
-
-export const findScheduleById = cache(async (id: number) => {
+export const findScheduleById = async (id: number) => {
   return await db
     .selectFrom("schedule")
     .where("id", "=", id)
     .selectAll()
     .executeTakeFirst();
-});
+};
 
-export const findSchedules = cache(async (criteria: Partial<Schedule>) => {
+export const findSchedules = async (criteria: Partial<Schedule>) => {
   let query = db.selectFrom("schedule");
 
   if (criteria.id) {
@@ -30,7 +27,7 @@ export const findSchedules = cache(async (criteria: Partial<Schedule>) => {
   }
 
   return await query.selectAll().execute();
-});
+};
 
 export async function updateSchedule(id: number, updateWith: ScheduleUpdate) {
   await db
