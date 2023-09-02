@@ -1,3 +1,10 @@
 .input {
-  @apply h-12 border-2 border-slate-200 rounded px-4 py-0.5 text-slate-500 bg-white font-medium outline-none focus:ring-2 focus:ring-indigo-600;
+  @apply h-12 border-r-2 border-t-2 border-b-2 border-slate-200 rounded-r w-full px-4 py-0.5 text-slate-500 bg-white font-medium outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-inset;
+}
+
+.labelWrapper {
+  @apply bg-indigo-200 border-2 border-slate-200  rounded-l p-2 h-12 flex items-center flex-grow flex-1;
+}
+.label {
+  @apply font-semibold text-sm tracking-wide text-indigo-900 block px-2 whitespace-nowrap;
 }

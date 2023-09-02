@@ -1,5 +1,5 @@
 .heading {
-  @apply font-heading font-black tracking-tighter leading-none text-slate-600 my-4;
+  @apply font-heading font-black tracking-tighter leading-none text-slate-600 dark:text-slate-300 my-4;
 }
 
 .h1 {

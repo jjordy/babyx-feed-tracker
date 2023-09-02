@@ -21,12 +21,28 @@ ChartJS.register(
 
 const MyLineChart = ({
   data = { datasets: [], labels: [] },
+  yLabel = "",
 }: {
   data: { datasets: any[]; labels: any[] };
+  yLabel?: string;
 }) => {
   return (
     <div>
-      <Line options={{ responsive: true }} data={data} />
+      <Line
+        options={{
+          responsive: true,
+          scales: {
+            y: {
+              ticks: {
+                callback: function (value, index, ticks) {
+                  return `${value} ${yLabel}`;
+                },
+              },
+            },
+          },
+        }}
+        data={data}
+      />
     </div>
   );
 };

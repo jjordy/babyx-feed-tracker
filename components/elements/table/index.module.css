@@ -7,12 +7,12 @@
 }
 
 .feedingTableHeading {
-  @apply py-0.5 px-2 font-black font-heading uppercase text-sm text-slate-400 border-slate-200;
+  @apply py-2 px-2 font-black font-heading uppercase text-sm text-slate-400 bg-slate-600 rounded-t border-slate-200;
 }
 
 .feedingTableRow {
-  @apply border-b-2 last:border-b-0;
+  @apply border-b-2 last:border-b-0  rounded-b;
 }
 .feedingTableColumn {
-  @apply py-1 px-2 font-semibold text-sm  text-slate-600 text-center;
+  @apply py-1 px-2 font-semibold text-sm  text-slate-600 dark:text-slate-100 text-center;
 }

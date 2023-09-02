@@ -23,10 +23,12 @@ export default async function RootLayout({
   const babies = await findBabies({});
   return (
     <html lang="en">
-      <body className={`${inter.variable}`}>
+      <body
+        className={`${inter.variable} bg-white dark:bg-gradient-to-r from-slate-900 to-zinc-600`}
+      >
         <Navbar />
         <main className="flex mt-12">
-          <section id="main-content" className="container mx-auto">
+          <section id="main-content" className="container mx-auto pt-8">
             {children}
           </section>
         </main>

@@ -7,7 +7,7 @@ import { addHours } from "date-fns";
  * Returns a random number between min (inclusive) and max (exclusive)
  */
 function getRandomArbitraryNum(min: number, max: number) {
-  return Math.random() * (max - min) + min;
+  return Math.ceil(Math.random() * (max - min) + min);
 }
 
 async function seedDB() {
@@ -44,7 +44,7 @@ async function seedDB() {
       last_name: "Addison",
       birth_day: perry_birth_day.toISOString(),
       gender: "Girl",
-      birth_weight: 4.1,
+      birth_weight: 4.12,
     });
 
     console.log(perry);
@@ -59,7 +59,7 @@ async function seedDB() {
 
     console.log(schedule);
 
-    const feedings = Array.from(Array(14 * 8).keys());
+    const feedings = Array.from(Array(18 * 8).keys());
     let startingAmount = 25;
     const feedingVariabilityAmount = 10;
     const feedingIncreaseRate = 2;
@@ -83,7 +83,7 @@ async function seedDB() {
         startingAmount - 5,
         startingAmount + feedingVariabilityAmount,
       );
-      console.log(feeding);
+
       await createFeeding({
         owner_id: perry.id!,
         schedule_id: schedule.id!,
@@ -104,7 +104,6 @@ async function seedDB() {
         startingAmount - 5,
         startingAmount + feedingVariabilityAmount,
       );
-      console.log(feeding);
       await createFeeding({
         owner_id: linnea.id!,
         schedule_id: schedule.id!,
